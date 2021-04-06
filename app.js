@@ -1,6 +1,7 @@
 var express = require('express'),
   app = express(),
   port = process.env.PORT || 8080,
+  dbPort = process.env.DBPORT || "27017",
   mongoose = require('mongoose'),
   Actor = require('./api/models/actorModel'),
   Trip = require('./api/models/tripModel'),
@@ -17,36 +18,13 @@ var express = require('express'),
     cert: fs.readFileSync('./keys/server.cert')
   };
   
-// MongoDB URI building
-var mongoDBUser = process.env.mongoDBUser || "yulipala";
-var mongoDBPass = process.env.mongoDBPass || "RUTA69ruta";
-var mongoDBCredentials = (mongoDBUser && mongoDBPass) ? mongoDBUser + ":" + mongoDBPass + "@" : "";
-
-var mongoDBHostname = process.env.mongoDBHostname || "localhost";
-var mongoDBPort = process.env.DBPort || "27017";
-var mongoDBName = process.env.mongoDBName || "ACME-Explorer";
-
-mongoDBURI = "mongodb+srv://" + mongoDBUser + ":" + mongoDBPass + "@cluster0.ugodt.mongodb.net/acmeExplorer?retryWrites=true&w=majority";
-var db = require('./db');
-db.connect(function (err, _db) {
-  logger.info('Initializing DB...');
-  if(err) {
-    logger.error('Error connecting to DB!', err);
-    return 1;
-  } else {
-    db.find({}, function (err, patients) {
-      if(err) {
-        logger.error('Error while getting initial data from DB!', err);
-      } else {
-        if (patients.length === 0) {
-          logger.info('Empty DB, loading initial data...');
-          db.init();
-      } else {
-          logger.info('DB already has ' + patients.length + ' patients.');
-      }
-      }
-    });
-  }
+mongoose.connect('mongodb://mongo:' + dbPort, {useNewUrlParser: true});
+mongoose.connection.on("open", function (err, conn) {
+  console.log('ACME-Explorer RESTful API server started with HTTPS on: ' + port);
+  http.createServer(keys, app).listen(port);
+});
+mongoose.connection.on("error", function (err, conn) {
+  console.error("DB init error " + err);
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -81,13 +59,5 @@ routesTrip(app);
 routesApplyTrip(app);
 routesStorage(app);
 routesLogin(app);
-
-
-
-console.log("Connecting DB to: " + mongoDBURI);
-
-http.createServer(keys, app).listen(port);
-console.log('ACME-Explorer RESTful API server started with HTTP on: ' + port);
-
 
 module.exports = app;
