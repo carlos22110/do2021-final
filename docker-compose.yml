@@ -1,0 +1,37 @@
+version: '3'
+services: 
+  explorer:
+    build: .
+    ports: 
+      - "127.0.0.1:${PORT}:${PORT}"
+    networks: 
+      service-tier:
+    volumes: 
+      - "logsvol:/usr/src/app/logs"
+    depends_on: 
+      - mongo
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - DBPORT=${DBPORT}
+      - PORT=${PORT}
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - VIRTUAL_PORT=${PORT}
+  mongo:
+    image: "mongo"
+    command: --port ${DBPORT} --logpath /var/log/mongodb/mongodb.log
+    networks: 
+      service-tier:
+        aliases: 
+          - "mongo${DBPORT}"
+    volumes: 
+      - "datavol:/data/db"
+      - "logsvol:/var/log/mongodb"
+
+volumes: 
+  datavol:
+  logsvol:
+    external: true
+
+networks: 
+  service-tier:
+    external: true

@@ -1,0 +1,40 @@
+{
+  "name": "acmeexplorergcj",
+  "version": "1.0.0",
+  "description": "ACMEExplorer REST API",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acme-Explorer-GCJ/AcmeExplorerGCJ.git"
+  },
+  "author": "Carlos Gallego, Giuliano Mirabella y Julia Palacios",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Acme-Explorer-GCJ/AcmeExplorerGCJ/issues"
+  },
+  "homepage": "https://github.com/Acme-Explorer-GCJ/AcmeExplorerGCJ#readme",
+  "dependencies": {
+    "@angular/cli": "^11.2.5",
+    "@angular/fire": "^6.1.4",
+    "bcrypt": "^5.0.1",
+    "dateformat": "^3.0.3",
+    "express": "^4.17.1",
+    "firebase": "^8.3.1",
+    "firebase-admin": "^9.5.0",
+    "mongodb": "^3.6.5",
+    "mongoose": "^5.11.18",
+    "nanoid": "^3.1.20",
+    "nanoid-good": "^3.1.0",
+    "oas-tools": "^2.1.8",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "mocha": "^8.3.2"
+  }
+}
